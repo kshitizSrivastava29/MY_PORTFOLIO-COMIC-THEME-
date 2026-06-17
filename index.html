@@ -297,6 +297,31 @@
             box-shadow: 2px 2px 0px var(--dark);
         }
 
+        /* NEW: Download Resume Button */
+        .resume-btn {
+            display: block;
+            margin-top: 20px;
+            padding: 10px;
+            background: var(--red);
+            color: var(--white);
+            text-decoration: none;
+            text-align: center;
+            font-family: 'Bangers', cursive;
+            font-size: 1.4rem;
+            letter-spacing: 1.5px;
+            border: 3px solid var(--dark);
+            box-shadow: 4px 4px 0px var(--dark);
+            transform: skew(-2deg);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .resume-btn:hover {
+            background: var(--yellow);
+            color: var(--dark);
+            transform: skew(-2deg) translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--dark);
+        }
+
         footer {
             grid-column: span 12;
             text-align: center;
@@ -310,6 +335,7 @@
         footer p {
             margin: 5px 0;
         }
+        
         /* Responsive Media Queries */
         @media (max-width: 768px) {
             .sidebar, .main-content {
@@ -369,6 +395,7 @@
                     <a href="https://github.com/kshitizSrivastava29" target="_blank">🔗 GitHub Profile</a>
                     <a href="https://leetcode.com/u/Kshitiz_Srivastava05/" target="_blank">🔗 LeetCode Profile</a>
                 </div>
+                <a href="My_Resume (4).pdf" download class="resume-btn">📄 GRAB RESUME!</a>
             </div>
 
             <div class="panel comic-border">
