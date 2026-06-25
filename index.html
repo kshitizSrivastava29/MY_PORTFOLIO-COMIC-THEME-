@@ -96,7 +96,7 @@
 
         .panel {
             padding: 20px;
-            padding-top: 40px; /* FIXED: Added padding top to completely resolve inner text overlap */
+            padding-top: 40px;
             position: relative;
             margin-top: 20px;
         }
@@ -120,7 +120,7 @@
         /* Profile Photo Container Frame */
         .avatar-frame {
             width: 100%;
-            aspect-ratio: 1 / 1; /* Keeps perfect square dimension proportions */
+            aspect-ratio: 1 / 1;
             overflow: hidden;
             border: var(--border-size) solid var(--dark);
             background: var(--yellow);
@@ -131,7 +131,7 @@
         .avatar-frame img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Centers the high-res photo cleanly without distortion */
+            object-fit: cover;
             display: block;
         }
 
@@ -297,7 +297,7 @@
             box-shadow: 2px 2px 0px var(--dark);
         }
 
-        /* NEW: Download Resume Button */
+        /* Download Resume Button */
         .resume-btn {
             display: block;
             margin-top: 20px;
@@ -338,38 +338,150 @@
         
         /* Responsive Media Queries */
         @media (max-width: 768px) {
-            .sidebar, .main-content {
-                grid-column: span 12 !important;
-            }
-            
             .comic-border {
                 box-shadow: 4px 4px 0px var(--dark);
             }
-            
             .avatar-frame {
                 max-width: 250px;
                 margin: 0 auto;
             }
-            
             .close-btn {
                 top: -5px; right: -5px;
                 font-size: 1.2rem;
                 padding: 3px 10px;
             }
-
             .achievement-item {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 10px;
             }
-
             .pow-icon {
                 margin-right: 0;
             }
         }
+
+        /* =========================================
+           COMIC LOADING SCREEN STYLES
+        ========================================= */
+        .comic-loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--yellow);
+            background-image: radial-gradient(var(--dark) 15%, transparent 16%), radial-gradient(var(--dark) 15%, transparent 16%);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+
+        .loader-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            background: var(--white);
+            padding: 40px 60px;
+            border: var(--border-size) solid var(--dark);
+            box-shadow: 12px 12px 0px var(--dark);
+            transform: rotate(-2deg);
+        }
+
+        /* Pulsing Action Text */
+        .burst-wrapper {
+            position: relative;
+            animation: pulseBurst 0.8s infinite alternate cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .burst-text {
+            font-family: 'Bangers', cursive;
+            font-size: 6rem;
+            color: var(--red);
+            text-shadow: 
+                4px 4px 0px var(--dark), 
+                -4px -4px 0px var(--dark), 
+                4px -4px 0px var(--dark), 
+                -4px 4px 0px var(--dark),
+                8px 8px 0px var(--white);
+            letter-spacing: 4px;
+            transform: rotate(5deg);
+        }
+
+        @keyframes pulseBurst {
+            0% { transform: scale(1) rotate(5deg); }
+            100% { transform: scale(1.15) rotate(0deg); }
+        }
+
+        /* Loading Text */
+        #comic-loading-text {
+            font-family: 'Bangers', cursive;
+            font-size: 2rem;
+            color: var(--dark);
+            letter-spacing: 2px;
+            margin: 0;
+        }
+
+        /* Progress Bar */
+        .progress-box {
+            width: 300px;
+            height: 35px;
+            background: #eee;
+            transform: skew(-10deg);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--blue);
+            border-right: 4px solid var(--dark);
+            background-image: repeating-linear-gradient(
+                -45deg,
+                rgba(255, 255, 255, 0.2),
+                rgba(255, 255, 255, 0.2) 10px,
+                transparent 10px,
+                transparent 20px
+            );
+            background-size: 28px 28px;
+            animation: 
+                fillAction 2.5s ease-out forwards,
+                moveStripes 1s linear infinite;
+        }
+
+        @keyframes fillAction {
+            0% { width: 0%; }
+            40% { width: 50%; }
+            70% { width: 75%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes moveStripes {
+            0% { background-position: 0 0; }
+            100% { background-position: 28px 0; }
+        }
     </style>
 </head>
 <body>
+
+    <div id="comic-loader" class="comic-loader-overlay">
+        <div class="loader-container">
+            <div class="burst-wrapper">
+                <div class="burst-text">BAM!</div>
+            </div>
+            
+            <h2 id="comic-loading-text">SKETCHING OUTLINES...</h2>
+            
+            <div class="progress-box comic-border">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         
@@ -449,35 +561,34 @@
                 </p>
             </div>
             <div class="panel comic-border">
-    <span class="panel-title" style="background: #fe6a2f;">
-       INTERNSHIPS
-    </span>
+                <span class="panel-title" style="background:#fe6a2f;">
+                    INTERNSHIPS
+                </span>
 
-    <p style="font-style: italic; color: #555; margin-bottom: 10px;">
-        (Click the panel below to view internship details!)
-    </p>
+                <p style="font-style: italic; color: #555; margin-bottom: 10px;">
+                    (Click the panel below to view internship details!)
+                </p>
 
-    <div class="project-grid">
-        <!-- Internship Card Here -->
-         <div class="project-card comic-border"
-onclick="openModal(
-'AI/ML Intern | Tata Steel Prashikshan',
-'Duration : May 2026 – July 2026 (2 Months)\n\nWorked on an industrial Machine Learning project to predict Ladle Furnace temperature drop using real-world steel manufacturing data.\n\n• Analyzed and preprocessed 3,300+ production records.\n• Developed a Random Forest Regression model.\n• Achieved R² = 0.95 on an initial 1,800-record dataset and R² = 0.55 on a larger industrial dataset.\n• Performed feature engineering, model evaluation, and visualization using Python, Pandas, Scikit-Learn, and Matplotlib.',
-'https://github.com/kshitizSrivastava29/Summer-Internship-Tata-Steel-Prashikshan'
-)">
-    <div class="project-thumbnail" style="background:#e55df1;">
-        AI / ML INTERN
-    </div>
+                <div class="project-grid">
+                    <div class="project-card comic-border"
+                    onclick="openModal(
+                    'AI/ML Intern | Tata Steel Prashikshan',
+                    'Duration : May 2026 – July 2026 (2 Months)\n\nWorked on an industrial Machine Learning project to predict Ladle Furnace temperature drop using real-world steel manufacturing data.\n\n• Analyzed and preprocessed 3,300+ production records.\n• Developed a Random Forest Regression model.\n• Achieved R² = 0.95 on an initial 1,800-record dataset and R² = 0.55 on a larger industrial dataset.\n• Performed feature engineering, model evaluation, and visualization using Python, Pandas, Scikit-Learn, and Matplotlib.',
+                    'https://github.com/kshitizSrivastava29/Summer-Internship-Tata-Steel-Prashikshan'
+                    )">
+                        <div class="project-thumbnail" style="background:#e55df1;">
+                            AI / ML INTERN
+                        </div>
 
-    <div class="project-info">
-        <h3>Tata Steel Prashikshan</h3>
-        <p style="font-size:0.85rem; color:#666; margin-top:5px;">
-            Machine Learning • Python • 2 Months
-        </p>
-    </div>
-</div>
-    </div>
-</div>
+                        <div class="project-info">
+                            <h3>Tata Steel Prashikshan</h3>
+                            <p style="font-size:0.85rem; color:#666; margin-top:5px;">
+                                Machine Learning • Python • 2 Months
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="panel comic-border">
                 <span class="panel-title">CHRONICLES (PROJECTS)</span>
                 <p style="font-style: italic; color: #555; margin-bottom: 10px;">(Click on a comic panel below to read details!)</p>
@@ -500,7 +611,7 @@ onclick="openModal(
                         </div>
                     </div>
 
-                    <div class="project-card comic-border" onclick="openModal('Portfolio Website', 'Designed and developed a responsive and interactive custom personal portfolio website to showcase dynamic projects and engineering skillsets. Built completely native code structures ensuring perfect UI rendering across varying screen sizes.', 'https://github.com/kshitizSrivastava29')">
+                    <div class="project-card comic-border" onclick="openModal('Portfolio Website', 'Designed and developed a responsive and interactive custom personal portfolio website to showcase dynamic projects and engineering skillsets. Built completely native code structures ensuring perfect UI rendering across varying screen sizes.', 'https://kshitizsrivastava29.github.io/MY_PORTFOLIO-COMIC-THEME-/')">
                         <div class="project-thumbnail">PORTFOLIO</div>
                         <div class="project-info">
                             <h3>Portfolio Website</h3>
@@ -574,6 +685,48 @@ onclick="openModal(
             if (event.key === 'Escape') {
                 closeModal();
             }
+        });
+    </script>
+
+    <script>
+        // Array of comic-themed loading phrases
+        const loadingPhrases = [
+            "SKETCHING OUTLINES...",
+            "INKING PANELS...",
+            "ADDING HALFTONES...",
+            "PRINTING COMIC..."
+        ];
+        
+        const textElement = document.getElementById('comic-loading-text');
+        const loaderOverlay = document.getElementById('comic-loader');
+        
+        let phraseIndex = 0;
+        
+        // Cycle through the text every 600ms
+        const textInterval = setInterval(() => {
+            phraseIndex = (phraseIndex + 1) % loadingPhrases.length;
+            textElement.innerText = loadingPhrases[phraseIndex];
+        }, 600);
+
+        // Fade out and remove the loader after the bar fills (2.8 seconds)
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                clearInterval(textInterval);
+                textElement.innerText = "ISSUE #1 READY!";
+                textElement.style.color = "var(--red)";
+                
+                // Add a slight delay so the user reads the "READY" text
+                setTimeout(() => {
+                    loaderOverlay.style.opacity = '0';
+                    loaderOverlay.style.visibility = 'hidden';
+                    
+                    // Remove from DOM entirely after fade out
+                    setTimeout(() => {
+                        loaderOverlay.remove();
+                    }, 500);
+                }, 500);
+                
+            }, 2500); // 2.5s matches the CSS bar animation time
         });
     </script>
 </body>
