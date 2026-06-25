@@ -473,7 +473,7 @@
             );
             background-size: 28px 28px;
             animation: 
-                fillAction 2.5s ease-out forwards,
+                fillAction 4s ease-out forwards,
                 moveStripes 1s linear infinite;
         }
 
@@ -729,7 +729,7 @@
         const textInterval = setInterval(() => {
             phraseIndex = (phraseIndex + 1) % loadingPhrases.length;
             textElement.innerText = loadingPhrases[phraseIndex];
-        }, 600);
+        }, 800);
 
         // Fade out and remove the loader after the bar fills (2.8 seconds)
         window.addEventListener('load', () => {
@@ -749,7 +749,7 @@
                     }, 500);
                 }, 500);
                 
-            }, 2500); // 2.5s matches the CSS bar animation time
+            }, 4000); // 2.5s matches the CSS bar animation time
         });
     </script>
 </body>
